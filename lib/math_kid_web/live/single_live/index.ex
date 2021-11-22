@@ -22,6 +22,18 @@ defmodule MathKidWeb.SingleLive.Index do
     {:noreply, apply_action(socket, socket.assigns.live_action, params)}
   end
 
+  def handle_event("send_correct", _payload, socket) do
+    {:noreply, socket}
+  end
+
+  def handle_event("send_new", _payload, socket) do
+    {:noreply, socket}
+  end
+
+  def handle_event("send_wrong", _payload, socket) do
+    {:noreply, socket}
+  end
+
   defp apply_action(socket, :index, _params) do
     exclude = socket.assigns.exclude
     %{word: word, element: element} = get_random(exclude)
@@ -29,12 +41,15 @@ defmodule MathKidWeb.SingleLive.Index do
     |> assign(:page_title, "Listing Singles")
     |> assign(:word, word)
     |> assign(:exclude, exclude ++ [element])
+    |> assign(:role, :student)
   end
 
   defp apply_action(socket, :tutor, _params) do
     socket
     |> assign(:page_title, "Listing Singles")
-    |> assign(:single, nil)
+    |> assign(:word, nil)
+    |> assign(:exclude, nil)
+    |> assign(:role, :tutor)
   end
 
   defp get_random(exclude) do

@@ -1,0 +1,23 @@
+Du har <%= @left %> frågor kvar.
+<br>
+<p>
+<div class="alert alert-info">Du har svarat rätt <%= @correct %> gånger</div>
+<br>
+<div class="alert alert-danger">Du har svarat fel <%= @wrong %> gånger</div>
+</p>
+<%= if @left != 0 do %>
+<div class="alert">
+  <h3><%= @word %></h3>
+</div>
+<% else %>
+<div class="alert alert-info">
+    <h1>GRATTIS DU ÄR NU KLAR!!</h1>
+    <h3>Du har tjänat ihop <%= @correct %> minuter surftid</h3>
+</div>
+<% end %>
+
+<%= if @role == :tutor do %>
+<button phx-click="send_correct">Rätt</button>
+<button phx-click="send_new">Ny</button>
+<button phx-click="send_wrong">Fel</button>
+<% end %>

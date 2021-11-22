@@ -8,7 +8,7 @@ defmodule MathKidWeb.SingleLive.WordList do
         "Fysik", "Raket", "Bränsle", "Yxa", "Raketbränsle", "Bil", "Bilbränsle",
         "Min bil går på bensin", "Tant Agda är 80 år", "Kyrkan ligger i Kyrkhult",
         "Småland är ett landskap", "Blekinge är ett landskap", "Kvantfysik",
-        "Vad gillar du?", "Jag gilllar apelsiner"
+        "Vad gillar du?", "Jag gilllar apelsiner", "Nationalencyklopedi"
       ]
     ]
   end
