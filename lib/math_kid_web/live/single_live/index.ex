@@ -6,6 +6,8 @@ defmodule MathKidWeb.SingleLive.Index do
 
   @impl true
   def mount(_params, _session, socket) do
+    MathKidWeb.Endpoint.subscribe("single")
+
     socket =
       socket
       |> assign(:correct, 0)
@@ -22,15 +24,71 @@ defmodule MathKidWeb.SingleLive.Index do
     {:noreply, apply_action(socket, socket.assigns.live_action, params)}
   end
 
+  def handle_info(%{event: "new"}, socket) do
+    socket =
+      case socket.assigns.role do
+        :student ->
+          exclude = socket.assigns.exclude
+          %{word: word, element: element} = get_random(exclude)
+          socket
+          |> assign(:word, word)
+          |> assign(:exclude, exclude ++ [element])
+        _ ->
+          socket
+      end
+    {:noreply, socket}
+  end
+
+  def handle_info(%{event: "wrong"}, socket) do
+    socket =
+      case socket.assigns.role do
+        :student ->
+          exclude = socket.assigns.exclude
+          %{word: word, element: element} = get_random(exclude)
+          socket
+          |> assign(:word, word)
+          |> assign(:exclude, exclude ++ [element])
+          |> assign(:wrong, socket.assigns.wrong + 1)
+          |> assign(:left, socket.assigns.left - 1)
+        _ ->
+          socket
+          |> assign(:wrong, socket.assigns.wrong + 1)
+          |> assign(:left, socket.assigns.left - 1)
+      end
+    {:noreply, socket}
+  end
+
+  def handle_info(%{event: "correct"}, socket) do
+    socket =
+      case socket.assigns.role do
+        :student ->
+          exclude = socket.assigns.exclude
+          %{word: word, element: element} = get_random(exclude)
+          socket
+          |> assign(:word, word)
+          |> assign(:exclude, exclude ++ [element])
+          |> assign(:correct, socket.assigns.correct + 1)
+          |> assign(:left, socket.assigns.left - 1)
+        _ ->
+          socket
+          |> assign(:correct, socket.assigns.correct + 1)
+          |> assign(:left, socket.assigns.left - 1)
+      end
+    {:noreply, socket}
+  end
+
   def handle_event("send_correct", _payload, socket) do
+    MathKidWeb.Endpoint.broadcast!("single", "correct", %{})
     {:noreply, socket}
   end
 
   def handle_event("send_new", _payload, socket) do
+    MathKidWeb.Endpoint.broadcast!("single", "new", %{})
     {:noreply, socket}
   end
 
   def handle_event("send_wrong", _payload, socket) do
+    MathKidWeb.Endpoint.broadcast!("single", "wrong", %{})
     {:noreply, socket}
   end
 
@@ -53,7 +111,7 @@ defmodule MathKidWeb.SingleLive.Index do
   end
 
   defp get_random(exclude) do
-    top = WordList.get_count()
+    top = WordList.get_count()-1
     selected = Enum.random(0..top)
     if selected in exclude do
       get_random(exclude)
