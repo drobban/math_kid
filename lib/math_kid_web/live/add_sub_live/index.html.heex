@@ -14,13 +14,13 @@ Du har svarat fel <%= @wrong %> gånger
     <%= if @question.operator == 1, do: "+", else: "-" %>
     <%= @question.b %>?
   </label>
-  <input type="text" name="answer"/>
+  <input type="number" name="answer"/>
   <button type="submit">Skicka in</button>
 
 </form>
 <% else %>
 <div style="width=100vw; height: 70vh; background: blue;">
     <h1>GRATTIS DU ÄR NU KLAR!!</h1>
-    Du har tjänat ihop <%= @correct %> minuter surftid
+    <h3>Du har tjänat ihop <%= @correct %> minuter surftid</h3>
 </div>
 <% end %>

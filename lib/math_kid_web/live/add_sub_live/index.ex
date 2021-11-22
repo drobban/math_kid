@@ -10,6 +10,8 @@ defmodule MathKidWeb.AddSubLive.Index do
       |> assign(:correct, 0)
       |> assign(:wrong, 0)
       |> assign(:left, 30)
+      |> assign(:start, DateTime.now!("Etc/UTC"))
+
     {:ok, socket}
   end
 
@@ -28,16 +30,17 @@ defmodule MathKidWeb.AddSubLive.Index do
     correct = socket.assigns.correct
     wrong = socket.assigns.wrong
 
-    correct? =
-      String.to_integer(answer) == calc_answer(socket.assigns.question)
+    correct? = String.to_integer(answer) == calc_answer(socket.assigns.question)
 
     socket =
       socket
       |> assign(:question, generate_calc())
-      |> assign(:correct, (if correct?, do: correct + 1, else: correct))
-      |> assign(:wrong, (if correct?, do: wrong, else: wrong + 1))
+      |> assign(:correct, if(correct?, do: correct + 1, else: correct))
+      |> assign(:wrong, if(correct?, do: wrong, else: wrong + 1))
       |> assign(:left, socket.assigns.left - 1)
+      |> assign(:stop, DateTime.now!("Etc/UTC"))
 
+    IO.inspect(socket.assigns)
     {:noreply, socket}
   end
 
@@ -47,17 +50,16 @@ defmodule MathKidWeb.AddSubLive.Index do
     |> assign(:question, generate_calc())
   end
 
-
   defp generate_calc() do
-    top = 10
+    # top = 10
+    top = Enum.random(3..11)
     a = Enum.random(0..top)
     b = Enum.random(0..(top - a))
     op = Enum.random(0..1)
 
-    question =
-      %{a: a, b: b, operator: op}
+    question = %{a: a, b: b, operator: op}
 
-    if calc_answer(question) < 0  do
+    if calc_answer(question) < 0 do
       generate_calc()
     else
       question
@@ -68,8 +70,10 @@ defmodule MathKidWeb.AddSubLive.Index do
     case op do
       1 ->
         a + b
+
       0 ->
         a - b
+
       _ ->
         nil
     end
