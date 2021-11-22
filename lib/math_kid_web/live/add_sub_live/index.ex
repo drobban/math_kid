@@ -10,6 +10,7 @@ defmodule MathKidWeb.AddSubLive.Index do
       |> assign(:correct, 0)
       |> assign(:wrong, 0)
       |> assign(:left, 30)
+      |> assign(:exclude, [])
       |> assign(:start, DateTime.now!("Etc/UTC"))
 
     {:ok, socket}
@@ -27,14 +28,17 @@ defmodule MathKidWeb.AddSubLive.Index do
 
   @impl true
   def handle_event("answer", %{"answer" => answer}, socket) do
+    question = socket.assigns.question
     correct = socket.assigns.correct
     wrong = socket.assigns.wrong
+    exclude = socket.assigns.exclude ++ [question]
 
     correct? = String.to_integer(answer) == calc_answer(socket.assigns.question)
 
     socket =
       socket
-      |> assign(:question, generate_calc())
+      |> assign(:exclude, exclude)
+      |> assign(:question, generate_calc(exclude))
       |> assign(:correct, if(correct?, do: correct + 1, else: correct))
       |> assign(:wrong, if(correct?, do: wrong, else: wrong + 1))
       |> assign(:left, socket.assigns.left - 1)
@@ -45,22 +49,22 @@ defmodule MathKidWeb.AddSubLive.Index do
   end
 
   defp apply_action(socket, :index, _params) do
+    exclude = socket.assigns.exclude
     socket
     |> assign(:page_title, "Listing Add subs")
-    |> assign(:question, generate_calc())
+    |> assign(:question, generate_calc(exclude))
   end
 
-  defp generate_calc() do
-    # top = 10
-    top = Enum.random(3..11)
+  defp generate_calc(exclude) do
+    top = Enum.random(0..15)
     a = Enum.random(0..top)
     b = Enum.random(0..(top - a))
     op = Enum.random(0..1)
 
     question = %{a: a, b: b, operator: op}
 
-    if calc_answer(question) < 0 do
-      generate_calc()
+    if calc_answer(question) < 0 or question in exclude do
+      generate_calc(exclude)
     else
       question
     end
