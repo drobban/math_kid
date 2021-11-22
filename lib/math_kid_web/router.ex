@@ -16,6 +16,8 @@ defmodule MathKidWeb.Router do
 
   scope "/", MathKidWeb do
     pipe_through :browser
+    live "/singles", SingleLive.Index, :index
+    live "/singles/tutor", SingleLive.Index, :tutor
     live "/add_subs", AddSubLive.Index, :index
 
     get "/", PageController, :index
