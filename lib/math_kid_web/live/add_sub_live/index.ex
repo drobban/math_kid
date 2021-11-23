@@ -50,6 +50,7 @@ defmodule MathKidWeb.AddSubLive.Index do
 
   defp apply_action(socket, :index, _params) do
     exclude = socket.assigns.exclude
+
     socket
     |> assign(:page_title, "Listing Add subs")
     |> assign(:question, generate_calc(exclude))
