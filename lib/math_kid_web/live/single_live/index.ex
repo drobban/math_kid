@@ -2,8 +2,6 @@ defmodule MathKidWeb.SingleLive.Index do
   use MathKidWeb, :live_view
   alias MathKidWeb.SingleLive.WordList
 
-  alias MathKid.Words
-
   @impl true
   def mount(_params, _session, socket) do
     MathKidWeb.Endpoint.subscribe("single")
@@ -12,7 +10,7 @@ defmodule MathKidWeb.SingleLive.Index do
       socket
       |> assign(:correct, 0)
       |> assign(:wrong, 0)
-      |> assign(:left, 30)
+      |> assign(:left, 15)
       |> assign(:exclude, [])
       |> assign(:start, DateTime.now!("Etc/UTC"))
 
@@ -24,6 +22,7 @@ defmodule MathKidWeb.SingleLive.Index do
     {:noreply, apply_action(socket, socket.assigns.live_action, params)}
   end
 
+  @impl true
   def handle_info(%{event: "new"}, socket) do
     socket =
       case socket.assigns.role do
@@ -86,6 +85,7 @@ defmodule MathKidWeb.SingleLive.Index do
     {:noreply, socket}
   end
 
+  @impl true
   def handle_event("send_correct", _payload, socket) do
     MathKidWeb.Endpoint.broadcast("single", "correct", %{})
     {:noreply, socket}

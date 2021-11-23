@@ -1,4 +1,4 @@
-defmodule MathKidWeb.AddSubLive.Index do
+defmodule MathKidWeb.SpeedLive.Index do
   use MathKidWeb, :live_view
 
   @impl true

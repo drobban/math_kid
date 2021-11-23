@@ -6,18 +6,21 @@ Du har <%= @left %> frågor kvar.
 <div class="alert alert-danger">Du har svarat fel <%= @wrong %> gånger</div>
 </p>
 <%= if @left != 0 do %>
-<div class="alert">
-  <h3><%= @word %></h3>
-</div>
+<form phx-submit="answer">
+
+  <label>
+    Fråga: vad blir
+    <%= @question.a %>
+    <%= if @question.operator == 1, do: "+", else: "-" %>
+    <%= @question.b %>?
+  </label>
+  <input type="number" name="answer"/>
+  <button type="submit">Skicka in</button>
+
+</form>
 <% else %>
 <div class="alert alert-info">
     <h1>GRATTIS DU ÄR NU KLAR!!</h1>
-    <h3>Du har tjänat ihop <%= @correct * 2 %> minuter surftid</h3>
+    <h3>Du har tjänat ihop <%= @correct %> minuter surftid</h3>
 </div>
-<% end %>
-
-<%= if @role == :tutor do %>
-<button phx-click="send_correct">Rätt</button>
-<button phx-click="send_new">Ny</button>
-<button phx-click="send_wrong">Fel</button>
 <% end %>
