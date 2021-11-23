@@ -1,10 +1,15 @@
 defmodule MathKidWeb.SpeedLive.Index do
   use MathKidWeb, :live_view
+  import MathKidWeb.MathHelper
+  @max_time 70
+  @step 100
 
   @impl true
   def mount(_params, _session, socket) do
     socket =
       socket
+      |> assign(:max_time, @max_time)
+      |> assign(:time, @max_time)
       |> assign(:correct, 0)
       |> assign(:wrong, 0)
       |> assign(:left, 30)
@@ -20,7 +25,49 @@ defmodule MathKidWeb.SpeedLive.Index do
   end
 
   @impl true
+  def handle_info(%{msg: :time_out}, socket) do
+    timer = Process.send_after(self(), %{msg: :time_out}, @step)
+    time = socket.assigns.time
+
+    if time == 0 do
+      socket =
+        socket
+        |> assign(:timer, timer)
+        |> assign(:time, @max_time)
+
+      handle_event("answer", %{"answer" => nil}, socket)
+    else
+      socket =
+        socket
+        |> assign(:timer, timer)
+        |> assign(:time, time - 1)
+
+      {:noreply, socket}
+    end
+  end
+
+  @impl true
   def handle_event("answer", %{"answer" => ""}, socket) do
+    {:noreply, socket}
+  end
+
+  @impl true
+  def handle_event("start", _msg, socket) do
+    socket =
+      socket
+      |> assign(:timer, Process.send_after(self(), %{msg: :time_out}, @step))
+
+    {:noreply, socket}
+  end
+
+  @impl true
+  def handle_event("stop", _msg, socket) do
+    Process.cancel_timer(socket.assigns.timer)
+
+    socket =
+      socket
+      |> assign(:timer, nil)
+
     {:noreply, socket}
   end
 
@@ -31,10 +78,16 @@ defmodule MathKidWeb.SpeedLive.Index do
     wrong = socket.assigns.wrong
     exclude = socket.assigns.exclude ++ [question]
 
-    correct? = String.to_integer(answer) == calc_answer(socket.assigns.question)
+    correct? =
+      if is_binary(answer) do
+        String.to_integer(answer) == calc_answer(socket.assigns.question)
+      else
+        false
+      end
 
     socket =
       socket
+      |> assign(:time, @max_time)
       |> assign(:exclude, exclude)
       |> assign(:question, generate_calc(exclude))
       |> assign(:correct, if(correct?, do: correct + 1, else: correct))
@@ -43,7 +96,12 @@ defmodule MathKidWeb.SpeedLive.Index do
       |> assign(:stop, DateTime.now!("Etc/UTC"))
 
     IO.inspect(socket.assigns)
-    {:noreply, socket}
+
+    if socket.assigns.left == 0 do
+      handle_event("stop", nil, socket)
+    else
+      {:noreply, socket}
+    end
   end
 
   defp apply_action(socket, :index, _params) do
@@ -54,31 +112,4 @@ defmodule MathKidWeb.SpeedLive.Index do
     |> assign(:question, generate_calc(exclude))
   end
 
-  defp generate_calc(exclude) do
-    top = Enum.random(0..15)
-    a = Enum.random(0..top)
-    b = Enum.random(0..(top - a))
-    op = Enum.random(0..1)
-
-    question = %{a: a, b: b, operator: op}
-
-    if calc_answer(question) < 0 or question in exclude do
-      generate_calc(exclude)
-    else
-      question
-    end
-  end
-
-  defp calc_answer(%{a: a, b: b, operator: op}) do
-    case op do
-      1 ->
-        a + b
-
-      0 ->
-        a - b
-
-      _ ->
-        nil
-    end
-  end
 end
