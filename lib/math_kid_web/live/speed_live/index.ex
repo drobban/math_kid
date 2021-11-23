@@ -111,5 +111,4 @@ defmodule MathKidWeb.SpeedLive.Index do
     |> assign(:page_title, "Listing Add subs")
     |> assign(:question, generate_calc(exclude))
   end
-
 end

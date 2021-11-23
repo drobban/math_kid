@@ -3,17 +3,17 @@ defmodule MathKidWeb.MathHelper do
     op = Enum.random(0..1)
 
     question =
-    if op == 1 do
-      answer = Enum.random(0..15)
-      a = Enum.random(0..answer)
-      b = answer - a
-      %{a: a, b: b, operator: op}
-    else
-      answer = Enum.random(0..15)
-      a = Enum.random(answer..15)
-      b = a - answer
-      %{a: a, b: b, operator: op}
-    end
+      if op == 1 do
+        answer = Enum.random(0..15)
+        a = Enum.random(0..answer)
+        b = answer - a
+        %{a: a, b: b, operator: op}
+      else
+        answer = Enum.random(0..15)
+        a = Enum.random(answer..15)
+        b = a - answer
+        %{a: a, b: b, operator: op}
+      end
 
     # if calc_answer(question) < 0 or question in exclude do
     if question in exclude do

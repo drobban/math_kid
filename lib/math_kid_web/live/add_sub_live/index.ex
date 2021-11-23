@@ -1,5 +1,6 @@
 defmodule MathKidWeb.AddSubLive.Index do
   use MathKidWeb, :live_view
+  import MathKidWeb.MathHelper
 
   @impl true
   def mount(_params, _session, socket) do
@@ -52,33 +53,5 @@ defmodule MathKidWeb.AddSubLive.Index do
     socket
     |> assign(:page_title, "Listing Add subs")
     |> assign(:question, generate_calc(exclude))
-  end
-
-  defp generate_calc(exclude) do
-    top = Enum.random(0..15)
-    a = Enum.random(0..top)
-    b = Enum.random(0..(top - a))
-    op = Enum.random(0..1)
-
-    question = %{a: a, b: b, operator: op}
-
-    if calc_answer(question) < 0 or question in exclude do
-      generate_calc(exclude)
-    else
-      question
-    end
-  end
-
-  defp calc_answer(%{a: a, b: b, operator: op}) do
-    case op do
-      1 ->
-        a + b
-
-      0 ->
-        a - b
-
-      _ ->
-        nil
-    end
   end
 end
