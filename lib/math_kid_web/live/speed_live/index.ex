@@ -1,7 +1,7 @@
 defmodule MathKidWeb.SpeedLive.Index do
   use MathKidWeb, :live_view
   import MathKidWeb.MathHelper
-  @max_time 70
+  @max_time 100
   @step 100
 
   @impl true
