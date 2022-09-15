@@ -35,7 +35,7 @@ defmodule MathKidWeb.ConclusionLive.Index do
         |> assign(:timer, timer)
         |> assign(:time, @max_time)
 
-      handle_event("answer", %{"answer" => nil}, socket)
+      handle_event("answer", %{"correct" => "false"}, socket)
     else
       socket =
         socket
