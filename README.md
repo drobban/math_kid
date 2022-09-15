@@ -1,4 +1,10 @@
 # MathKid
+Classic case of dadgineering.
+
+next feature. multiplayer.
+
+
+-------------------------------------------------------------------------------
 
 To start your Phoenix server:
 
