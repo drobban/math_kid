@@ -20,6 +20,7 @@ defmodule MathKidWeb.Router do
     live "/singles/tutor", SingleLive.Index, :tutor
     live "/add_subs", AddSubLive.Index, :index
     live "/speed", SpeedLive.Index, :index
+    live "/conclusion", ConclusionLive.Index, :index
 
     get "/", PageController, :index
   end
