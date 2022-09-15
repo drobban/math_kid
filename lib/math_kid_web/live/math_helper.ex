@@ -36,21 +36,22 @@ defmodule MathKidWeb.MathHelper do
     end
   end
 
-
   def generate_random_tripplet(fake?) do
-    options = [(&(&1 + &2)), (&(&1 - &2))]
+    options = [&(&1 + &2), &(&1 - &2)]
     option = :rand.uniform(2) - 1
     a = Enum.random(40..100)
     b = Enum.random(0..50)
+
     case fake? do
       true ->
         op_random = :rand.uniform(2) - 1
         [a + :rand.uniform(10), b, Enum.at(options, option).(a, b), Enum.at(options, op_random)]
+
       false ->
         [a, b, Enum.at(options, option).(a, b), Enum.at(options, option)]
     end
-
   end
+
   def generate_quad_options() do
     a = generate_random_tripplet(false)
     b = generate_random_tripplet(true)
