@@ -9,10 +9,6 @@ defmodule MathKidWeb.MultiLive.Index do
       socket
       |> assign(:player, nil)
       |> assign(:connected, [])
-      |> assign(:correct, 0)
-      |> assign(:wrong, 0)
-      |> assign(:left, 30)
-      |> assign(:exclude, [])
       |> assign(:start, DateTime.now!("Etc/UTC"))
 
     {:ok, socket}

@@ -1,8 +1,3 @@
-<p>
-<div class="alert alert-info">Du har svarat rätt <%= @correct %> gånger</div>
-<br>
-<div class="alert alert-danger">Du har svarat fel <%= @wrong %> gånger</div>
-</p>
 <%= if is_nil(@player) do %>
   <%= if !Enum.member?(@connected, "player1") do %>
   <button phx-click="player" phx-value-player="player1">Player 1</button>
