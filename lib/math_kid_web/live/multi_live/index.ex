@@ -45,6 +45,7 @@ defmodule MathKidWeb.MultiLive.Index do
     connected =
     case payload[:player] do
       nil ->
+        # Echo from self...
         IO.inspect("none connected")
         socket.assigns.connected
       x ->
@@ -57,12 +58,12 @@ defmodule MathKidWeb.MultiLive.Index do
   @impl true
   def handle_info(%{event: "connected", payload: payload}, socket) do
     IO.inspect("Got connection")
-    IO.inspect(payload[:player])
 
     connected =
       case payload[:player] do
         nil ->
-          IO.inspect("none connected")
+          # Error case. Should not happen.
+          IO.inspect("error?")
           socket.assigns.connected
         x ->
           socket.assigns.connected ++ [x]
