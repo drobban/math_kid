@@ -14,6 +14,12 @@
       <section class="container">
         <nav>
           <ul>
+            <li><%= link "Börja tävling", to: Routes.multi_index_path(@conn, :index) %></li>
+          </ul>
+        </nav>
+
+        <nav>
+          <ul>
             <li><%= link "Börja matte test", to: Routes.add_sub_index_path(@conn, :index) %></li>
             <li><%= link "Börja snabbmatte test", to: Routes.speed_index_path(@conn, :index) %></li>
             <li><%= link "Börja uteslutnings matte", to: Routes.conclusion_index_path(@conn, :index) %></li>

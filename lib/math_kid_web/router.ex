@@ -21,6 +21,7 @@ defmodule MathKidWeb.Router do
     live "/add_subs", AddSubLive.Index, :index
     live "/speed", SpeedLive.Index, :index
     live "/conclusion", ConclusionLive.Index, :index
+    live "/multiplayer", MultiLive.Index, :index
 
     get "/", PageController, :index
   end
