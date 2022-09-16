@@ -9,6 +9,7 @@ defmodule MathKidWeb.MultiLive.Index do
       socket
       |> assign(:player, nil)
       |> assign(:connected, [])
+      |> assign(:opponent, nil)
       |> assign(:start, DateTime.now!("Etc/UTC"))
 
     {:ok, socket}
@@ -21,7 +22,6 @@ defmodule MathKidWeb.MultiLive.Index do
 
   @impl true
   def handle_event("player", %{"player" => name}, socket) do
-
     socket =
       socket
       |> assign(:player, name)
@@ -40,31 +40,13 @@ defmodule MathKidWeb.MultiLive.Index do
 
   @impl true
   def handle_info(%{event: "pong", payload: payload}, socket) do
-    IO.inspect("Got pong")
-
-    connected =
-    case payload[:player] do
-      nil ->
-        # Echo from self...
-        IO.inspect("none connected")
-        socket.assigns.connected
-      x ->
-        Enum.uniq(socket.assigns.connected ++ [x])
-    end
-
-    {:noreply, socket |> assign(:connected, connected)}
-  end
-
-  @impl true
-  def handle_info(%{event: "connected", payload: payload}, socket) do
-    IO.inspect("Got connection")
 
     connected =
       case payload[:player] do
         nil ->
-          # Error case. Should not happen.
-          IO.inspect("error?")
+          # Echo from self...
           socket.assigns.connected
+
         x ->
           Enum.uniq(socket.assigns.connected ++ [x])
       end
@@ -72,6 +54,38 @@ defmodule MathKidWeb.MultiLive.Index do
     {:noreply, socket |> assign(:connected, connected)}
   end
 
+  @impl true
+  def handle_info(%{event: "connected", payload: payload}, socket) do
+
+    connected =
+      case payload[:player] do
+        nil ->
+          # Error case. Should not happen.
+          socket.assigns.connected
+
+        x ->
+          Enum.uniq(socket.assigns.connected ++ [x])
+      end
+
+    {:noreply, socket |> assign(:connected, connected)}
+  end
+
+  @impl true
+  def handle_info(%{event: "status", payload: payload}, socket) do
+
+    %{player: player, questions: questions, correct: correct, wrong: wrong} = payload
+
+    socket =
+    if player != socket.assigns.player do
+      socket
+      |> assign(opponent: payload)
+    else
+      socket
+    end
+
+
+    {:noreply, socket}
+  end
 
   defp apply_action(socket, :index, _params) do
     MathKidWeb.Endpoint.broadcast("multiplayer", "ping", %{})
@@ -79,5 +93,4 @@ defmodule MathKidWeb.MultiLive.Index do
     socket
     |> assign(:page_title, "Multiplayer")
   end
-
 end

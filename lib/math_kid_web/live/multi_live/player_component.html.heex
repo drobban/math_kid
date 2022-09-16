@@ -1,3 +1,30 @@
 <div class="container">
-  <%= @id %>
+  Du har <%= @left %> frågor kvar.
+  <br>
+  <p>
+    <div class="alert alert-info">Du har svarat rätt <%= @correct %> gånger</div>
+    <br>
+    <div class="alert alert-danger">Du har svarat fel <%= @wrong %> gånger</div>
+  </p>
+  <%= if @left != 0 do %>
+
+  <table>
+    <%= for [a,b,c,op] <- @questions do %>
+    <tr>
+      <td><%= a %></td>
+      <td><%= if op == (&(&1 + &2)), do: "+", else: "-"%></td>
+      <td><%= b %></td>
+      <td>=</td>
+      <td><button phx-click={JS.push("answer", target: @myself)} phx-value-correct={"#{op.(a,b) == c}"}><%= c %></button> </td>
+    </tr>
+    <% end %>
+  </table>
+
+  <% else %>
+  <div class="alert alert-info">
+      <h1>GRATTIS DU ÄR NU KLAR!!</h1>
+      <h3>Du har tjänat ihop <%= @correct %> minuter surftid</h3>
+  </div>
+  <% end %>
+
 </div>

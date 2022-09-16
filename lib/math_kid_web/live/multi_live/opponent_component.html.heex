@@ -1,3 +1,24 @@
 <div class="container">
-  data opponent
+  <%= if !is_nil(@payload) do %>
+  Din motståndare har <%= @payload.left %> frågor kvar.
+  <br>
+  <p>
+    <div class="alert alert-info">Har svarat rätt <%= @payload.correct %> gånger</div>
+    <br>
+    <div class="alert alert-danger">Har svarat fel <%= @payload.wrong %> gånger</div>
+  </p>
+
+  <table>
+    <%= for [a,b,c,op] <- @payload.questions do %>
+    <tr>
+      <td><%= a %></td>
+      <td><%= if op == (&(&1 + &2)), do: "+", else: "-"%></td>
+      <td><%= b %></td>
+      <td>=</td>
+      <td><%= c %></td>
+    </tr>
+    <% end %>
+  </table>
+
+  <%end%>
 </div>

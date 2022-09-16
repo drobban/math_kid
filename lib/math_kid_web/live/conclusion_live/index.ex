@@ -79,7 +79,6 @@ defmodule MathKidWeb.ConclusionLive.Index do
     exclude = socket.assigns.exclude ++ [questions]
 
     correct? = answer == "true"
-    IO.inspect(answer)
 
     socket =
       socket
@@ -91,7 +90,6 @@ defmodule MathKidWeb.ConclusionLive.Index do
       |> assign(:left, socket.assigns.left - 1)
       |> assign(:stop, DateTime.now!("Etc/UTC"))
 
-    IO.inspect(socket.assigns)
 
     if socket.assigns.left == 0 do
       handle_event("stop", nil, socket)

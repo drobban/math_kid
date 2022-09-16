@@ -20,7 +20,8 @@
     <div class="column">
       <%= if (Enum.count(@connected) > 1) do %>
       <%= live_component MathKidWeb.MultiLive.OpponentComponent,
-          id: "opponent" %>
+          id: @player,
+          payload: @opponent %>
       <% end %>
     </div>
 
