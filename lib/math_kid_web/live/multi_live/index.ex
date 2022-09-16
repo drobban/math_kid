@@ -49,7 +49,7 @@ defmodule MathKidWeb.MultiLive.Index do
         IO.inspect("none connected")
         socket.assigns.connected
       x ->
-        socket.assigns.connected ++ [x]
+        Enum.uniq(socket.assigns.connected ++ [x])
     end
 
     {:noreply, socket |> assign(:connected, connected)}
@@ -66,7 +66,7 @@ defmodule MathKidWeb.MultiLive.Index do
           IO.inspect("error?")
           socket.assigns.connected
         x ->
-          socket.assigns.connected ++ [x]
+          Enum.uniq(socket.assigns.connected ++ [x])
       end
 
     {:noreply, socket |> assign(:connected, connected)}

@@ -11,11 +11,17 @@
   <div class="row">
 
     <div class="column">
-      data
+      <%= if !is_nil(@player) do %>
+      <%= live_component MathKidWeb.MultiLive.PlayerComponent,
+          id: @player %>
+      <% end %>
     </div>
 
     <div class="column">
-      data
+      <%= if (Enum.count(@connected) > 1) do %>
+      <%= live_component MathKidWeb.MultiLive.OpponentComponent,
+          id: "opponent" %>
+      <% end %>
     </div>
 
   </div>
