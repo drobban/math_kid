@@ -1,8 +1,8 @@
 # MathKid
 Classic case of dadgineering.
 
-next feature. multiplayer.
-
+Next feature, implement difficulty level in competition mode.
+Kind of cheating playing against your kid on the same difficulty level =D
 
 -------------------------------------------------------------------------------
 
