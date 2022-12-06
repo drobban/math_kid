@@ -10,8 +10,5 @@ defmodule MathKidWeb.MultiLive.OpponentComponent do
     {:ok, socket}
   end
 
-  @impl true
-  def handle_event(_event, _payload, socket) do
-    {:noreply, socket}
-  end
+
 end

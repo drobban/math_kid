@@ -77,6 +77,8 @@ defmodule MathKidWeb.MultiLive.Index do
 
     socket =
     if player != socket.assigns.player do
+
+      # send_update(MathKidWeb.MultiLive.PlayerComponent, id: socket.assigns.player, opponent: true)
       socket
       |> assign(opponent: payload)
     else

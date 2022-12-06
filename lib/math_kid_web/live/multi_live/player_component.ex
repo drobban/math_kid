@@ -28,6 +28,20 @@ defmodule MathKidWeb.MultiLive.PlayerComponent do
     {:ok, socket}
   end
 
+  # @impl true
+  # def handle_update(%{opponent: true}, socket) do
+  #   status = %{
+  #     player: socket.assigns.id,
+  #     questions: socket.assigns.questions,
+  #     correct: socket.assigns.correct,
+  #     wrong: socket.assigns.wrong,
+  #     left: socket.assigns.left
+  #   }
+  #   MathKidWeb.Endpoint.broadcast("multiplayer", "status", status)
+
+  #   {:noreply, socket}
+  # end
+
   @impl true
   def handle_event("stop", _msg, socket) do
     {:noreply, socket}
@@ -73,4 +87,5 @@ defmodule MathKidWeb.MultiLive.PlayerComponent do
       {:noreply, socket}
     end
   end
+
 end
