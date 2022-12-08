@@ -22,6 +22,8 @@ defmodule MathKidWeb.Router do
     live "/speed", SpeedLive.Index, :index
     live "/conclusion", ConclusionLive.Index, :index
     live "/multiplayer", MultiLive.Index, :index
+    live "/multiples", MultipleLive.Index, :index
+
 
     get "/", PageController, :index
   end

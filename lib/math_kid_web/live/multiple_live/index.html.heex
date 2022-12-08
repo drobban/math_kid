@@ -1,0 +1,26 @@
+Du har <%= @left %> frågor kvar.
+<br>
+<p>
+<div class="alert alert-info">Du har svarat rätt <%= @correct %> gånger</div>
+<br>
+<div class="alert alert-danger">Du har svarat fel <%= @wrong %> gånger</div>
+</p>
+<%= if @left != 0 do %>
+<form phx-submit="answer">
+
+  <label>
+    Fråga: vad blir
+    <%= @question.a %>
+    <%= if @question.operator == 0, do: "*", else: "nil" %>
+    <%= @question.b %>?
+  </label>
+  <input type="number" name="answer"/>
+  <button type="submit">Skicka in</button>
+
+</form>
+<% else %>
+<div class="alert alert-info">
+    <h1>GRATTIS DU ÄR NU KLAR!!</h1>
+    <h3>Du har tjänat ihop <%= @correct %> minuter surftid</h3>
+</div>
+<% end %>
